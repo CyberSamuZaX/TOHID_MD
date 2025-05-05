@@ -32,7 +32,7 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
 
 cmd({
     pattern: "openai",
-    alias: ["chatgpt", "gpt3", "open-gpt"],
+    alias: ["chatgpt", "gpt3", "thero"],
     desc: "Chat with OpenAI",
     category: "ai",
     react: "🧠",
@@ -50,7 +50,7 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
             return reply("OpenAI failed to respond. Please try again later.");
         }
 
-        await reply(`🧠 *OpenAI Response:*\n\n${data.result}`);
+        await reply(`🧠 *Thero Response:*\n\n${data.result}`);
         await react("✅");
     } catch (e) {
         console.error("Error in OpenAI command:", e);
