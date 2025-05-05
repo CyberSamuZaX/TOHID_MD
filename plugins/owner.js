@@ -29,22 +29,16 @@ async (conn, mek, m, { from }) => {
 
         // Send the owner contact message with image and audio
         await conn.sendMessage(from, {
-            image: { url: 'https://i.ibb.co/4ZSYvPTq/lordali.jpg' }, // Image URL from your request
-            caption: `╭━━〔 *TOHID_MD* 〕━━┈⊷
+            image: { url: 'https://i.ibb.co/VpV6vqGV/toolzin-com-94752677804.jpg' }, // Image URL from your request
+            caption: `╭━━〔 *KPT-BOT* 〕━━┈⊷
 ┃◈╭─────────────·๏
 ┃◈┃• *Here is the owner details*
-┃◈┃• *Name* - ${ownerName}
-┃◈┃• *Number* ${ownerNumber}
-┃◈┃• *Version*: 2.0.0 Beta
+┃◈┃• *Name* - Pagngnasiri
+┃◈┃• *Number* 0752677804
+┃◈┃• *Version*: 1.0.0 Beta
 ┃◈╰─┬──────────┈⊷
-┃◈╭─┴────────────●●►
-┃◈├ ╔═╦═╗───╔══╗╔╗╔╗╔╗
-┃◈├ ║║║║╠╦╦═╩╗╔╩╣╚╬╬╝║
-┃◈├ ║║║║║╔╩══╣║╬║║║║╬║
-┃◈├ ╚╩═╩╩╝───╚╩═╩╩╩╩═╝
-┃◈╰─────────────●●►
 ╰──────────────┈⊷
-> ©𝙿𝙾𝚆𝙴𝚁𝙴𝙳 𝙱𝚈 𝚃𝙾𝙷𝙸𝙳_𝙼𝙳`, // Display the owner's details
+> ©POWERD BY K.Pagngnasiri Thero`, // Display the owner's details
             contextInfo: {
                 mentionedJid: [`${ownerNumber.replace('+', '')}@s.whatsapp.net`], 
                 forwardingScore: 999,
