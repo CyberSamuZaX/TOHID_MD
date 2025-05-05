@@ -24,13 +24,15 @@ async (conn, mek, m, { from, q, reply }) => {
         const response = await axios.get(url);
         const translation = response.data.responseData.translatedText;
 
-        const translationMessage = `> *TOHID_MD-TRANSLATION*
+        const translationMessage = `> *TKPT-BOT_TRANSLATION*
 
 > 🔤 *Original*: ${textToTranslate}
 
 > 🔠 *Translated*: ${translation}
 
-> 🌐 *Language*: ${targetLang.toUpperCase()}`;
+> 🌐 *Language*: ${targetLang.toUpperCase()}
+
+> ©POWERD BY K.PAGNGNASIRI THERO 🖤`;
 
         return reply(translationMessage);
     } catch (e) {
