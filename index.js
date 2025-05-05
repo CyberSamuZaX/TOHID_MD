@@ -114,7 +114,7 @@ const port = process.env.PORT || 9090;
   console.log('Bot connected to whatsapp ✅')
   
   let up = `*Hello there KPT_BOT User! \ud83d\udc4b\ud83c\udffb* \n\n> Simple , Straight Forward But Loaded With Features \ud83c\udf8a, Meet KPT_BOT  WhatsApp Bot.\n\n *Thanks for using KPT_BOT \ud83d\udea9* \n\n> Message Me :- ⤵️\n \nwa.me/+94752677804\n\n- *YOUR PREFIX:* = ${prefix}\n\n> ©POWERD BY K.PAGNGNASIRI THERO \ud83d\udda4`;
-    conn.sendMessage(conn.user.id, { image: { url: `https://i.ibb.co/4ZSYvPTq/lordali.jpg` }, caption: up })
+    conn.sendMessage(conn.user.id, { image: { url: `https://i.ibb.co/VpV6vqGV/toolzin-com-94752677804.jpg` }, caption: up })
   }
   })
   conn.ev.on('creds.update', saveCreds)
