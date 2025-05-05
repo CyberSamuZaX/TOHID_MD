@@ -13,8 +13,7 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
     try {
         if (!q) return reply("Please provide a message for the AI.\nExample: `.ai Hello`");
 
-        const apiUrl = `https://nikka-api.vercel.app/ai/gemini?q=${encodeURIComponent(message.text)}&apiKey=nikka`;
-
+        const apiUrl = `https://vapis.my.id/api/gemini?q=${encodeURIComponent(q)}`;
         const { data } = await axios.get(apiUrl);
 
         if (!data || !data.message) {
