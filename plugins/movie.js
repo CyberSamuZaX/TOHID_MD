@@ -1,78 +1,47 @@
-const axios = require('axios');
-const { cmd } = require('../command');
+const fetch = require("node-fetch");
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
 
-cmd({
-    pattern: "movie",
-    desc: "Fetch detailed information about a movie.",
-    category: "utility",
-    react: "🎬",
-    filename: __filename
-},
-async (conn, mek, m, { from, reply, sender, args }) => {
-    try {
-        // Properly extract the movie name from arguments
-        const movieName = args.length > 0 ? args.join(' ') : m.text.replace(/^[\.\#\$\!]?movie\s?/i, '').trim();
-        
-        if (!movieName) {
-            return reply("📽️ Please provide the name of the movie.\nExample: .movie Iron Man");
-        }
+module.exports = async (context) => {
+  const { client, m, text } = context;
 
-        const apiUrl = `https://apis.davidcyriltech.my.id/imdb?query=${encodeURIComponent(movieName)}`;
-        const response = await axios.get(apiUrl);
+  try {
+    if (!text) return m.reply("Please provide a download link.");
 
-        if (!response.data.status || !response.data.movie) {
-            return reply("🚫 Movie not found. Please check the name and try again.");
-        }
+    const downloadResponse = await fetch(`https://apis.davidcyriltech.my.id/movies/download?url=${encodeURIComponent(text)}`);
+    const downloadData = await downloadResponse.json();
 
-        const movie = response.data.movie;
-        
-        // Format the caption
-        const dec = `
-🎬 *${movie.title}* (${movie.year}) ${movie.rated || ''}
+    if (!downloadData.status || !downloadData.movie || !downloadData.movie.download_links) return m.reply("No download links available for the selected movie.");
 
-⭐ *IMDb:* ${movie.imdbRating || 'N/A'} | 🍅 *Rotten Tomatoes:* ${movie.ratings.find(r => r.source === 'Rotten Tomatoes')?.value || 'N/A'} | 💰 *Box Office:* ${movie.boxoffice || 'N/A'}
+    const downloadLink = downloadData.movie.download_links[0].direct_download; // Select the desired quality link
 
-📅 *Released:* ${new Date(movie.released).toLocaleDateString()}
-⏳ *Runtime:* ${movie.runtime}
-🎭 *Genre:* ${movie.genres}
+    const response = await axios({
+      url: downloadLink,
+      method: "GET",
+      responseType: "stream"
+    });
 
-📝 *Plot:* ${movie.plot}
+    const outputPath = path.join(__dirname, `${downloadData.movie.title.replace(/[^a-zA-Z0-9 ]/g, "")}.mp4`);
+    const writer = fs.createWriteStream(outputPath);
 
-🎥 *Director:* ${movie.director}
-✍️ *Writer:* ${movie.writer}
-🌟 *Actors:* ${movie.actors}
+    response.data.pipe(writer);
 
-🌍 *Country:* ${movie.country}
-🗣️ *Language:* ${movie.languages}
-🏆 *Awards:* ${movie.awards || 'None'}
+    writer.on("finish", async () => {
+      await client.sendMessage(m.chat, {
+        document: { url: outputPath },
+        mimetype: "video/mp4",
+        fileName: `${downloadData.movie.title.replace(/[^a-zA-Z0-9 ]/g, "")}.mp4`
+      }, { quoted: m });
 
-[View on IMDb](${movie.imdbUrl})
-`;
+      fs.unlinkSync(outputPath); // Clean up the downloaded file after sending
+    });
 
-        // Send message with the requested format
-        await conn.sendMessage(
-            from,
-            {
-                image: { 
-                    url: movie.poster && movie.poster !== 'N/A' ? movie.poster : 'https://i.ibb.co/4ZSYvPTq/lordali.jpg'
-                },
-                caption: dec,
-                contextInfo: {
-                    mentionedJid: [sender],
-                    forwardingScore: 999,
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363207624903731@newsletter',
-                        newsletterName: '𝐓𝐎𝐇𝐈𝐃 𝐓𝐄𝐂𝐇 🤖',
-                        serverMessageId: 143
-                    }
-                }
-            },
-            { quoted: mek }
-        );
+    writer.on("error", (err) => {
+      m.reply("Download failed\n" + err.message);
+    });
 
-    } catch (e) {
-        console.error('Movie command error:', e);
-        reply(`❌ Error: ${e.message}`);
-    }
-});
+  } catch (e) {
+    m.reply('An error occurred while processing your request\n' + e);
+  }
+};
