@@ -10,8 +10,7 @@ cmd({
 },
 async (conn, mek, m, { from, reply }) => {
     try {
-        const apiKey="0f2c43ab11324578a7b1709651736382";
-        const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`);
+        const response = await axios.get(`https://mr-manul-ofc-apis.vercel.app/lankadeepa-news?apikey=Manul-Official-Key-3467`);
         const articles = response.data.articles;
 
         if (!articles.length) return reply("No news articles found.");
